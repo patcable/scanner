@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mkdir -p test_struct/folder{1,2,3,4,5,6}
+touch test_struct/folder{1,2,3,4,5,6}/file{1,2,3}
+cp specimen test_struct/folder3/file2
