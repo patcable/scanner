@@ -51,7 +51,7 @@ int scan_tree(const char *fpath, const struct stat *sb, int tflag, struct FTW *f
         /* 
         ** so, we read in the virus definitions in the main function below, but 
         ** i need to use them here. i could re-read them for each file we scan
-        ** but that doesnt help us here. help :(
+        ** but that seems like a waste of time... hmm.
         for(i = 0; i < count; ++i) {
             for(idx = 0; idx < lSize; ++idx) {
                 int matched = 0;
