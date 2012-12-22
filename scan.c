@@ -9,18 +9,22 @@
 #include <string.h>
 #include <stdint.h>
 
+char *sig[1024]; // Assuming the maximum number of signatures is 1024
+int count = 0;
+
 // Patrick Cable - 4055.760 - Computer Virus and Malware
 // 2012-12-21 - Prof. Bo Yuan
 
 // Scan function - this needs to be defined before int main(), so here it is.
 // nftw() calls scan_tree for each file found in the structure given on the
 // command line
+
 int scan_tree(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
     // define file pointer, a place to store file size and a character buffer 
     FILE *pFile;
     long lSize;
     char *bbuffer;
-
+    int i;
     // only scan files (flag FTW_F from nftw() spec)
     if(tflag == FTW_F) {
         // Begin scan
@@ -31,6 +35,7 @@ int scan_tree(const char *fpath, const struct stat *sb, int tflag, struct FTW *f
             printf("Could not open %s\n", fpath);
             exit(1);
         }
+
         // go to the end of the file
         fseek(pFile, 0, SEEK_END);
         // store this as the size
@@ -43,15 +48,12 @@ int scan_tree(const char *fpath, const struct stat *sb, int tflag, struct FTW *f
             printf("Could not read %s into memory\n", fpath);
             exit(1);
         }
+
         //read the file into the buffer
         fread(bbuffer, 1, lSize, pFile);
 
         // scan stuff here
         int idx, sidx;
-        /* 
-        ** so, we read in the virus definitions in the main function below, but 
-        ** i need to use them here. i could re-read them for each file we scan
-        ** but that seems like a waste of time... hmm.
         for(i = 0; i < count; ++i) {
             for(idx = 0; idx < lSize; ++idx) {
                 int matched = 0;
@@ -62,14 +64,13 @@ int scan_tree(const char *fpath, const struct stat *sb, int tflag, struct FTW *f
                     ++matched;
                     ++idx;
                     if(matched == strlen(sig[i])) {
-                        printf("%s: Contains virus %d", namelist[files]->d_name, i+1);
+                        printf("Contains virus %d ", i+1);
                         idx = lSize;
                     }
                 }
             }
         }
-        */
-        printf("Clean!\n");
+        printf("\n");
 
         // close file, dealloc buffer
         fclose(pFile);
@@ -89,9 +90,6 @@ int main (int argc, char **argv) {
     FILE * pFile;
     long lSize;
     char *buffer;
-    int i;
-    int count = 0;
-    char *sig[1024]; // Assuming the maximum number of signatures is 1024
 
     // if the command isnt run with the right parameters, tell the user 
     // how to use it.
@@ -109,7 +107,7 @@ int main (int argc, char **argv) {
 
     //get file size
     fseek (pFile , 0 , SEEK_END);
-    lSize = ftell (pFile);
+    lSize = ftell(pFile);
     rewind (pFile);
 
     //allocate memory
@@ -133,14 +131,10 @@ int main (int argc, char **argv) {
         }
         ++count;
     }
-
     // clean up after ourselves...
-    free (buffer);
     fclose (pFile);
-    printf("OK.\n");
-
     // use nftw() to go through the tree structure
     nftw(dir_path, scan_tree, 20, flags);
-
+    free(buffer);
     return 0;
 }
