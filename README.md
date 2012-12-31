@@ -30,17 +30,21 @@ file based on the global signature definitions stored in the `sig` character
 variable.
 
 Looking at the program step-by-step:
+
 1. The program reads in the virus signatures and stores them in `char *sig`
+
 2. The `nftw()` function is called, passing the directory path grabbed in 
    `argv[1]` and the `scan_tree()` function is passed. We pass a general 
    variable to capture flags, and open 20 file descriptors to facilitate 
    scanning
+
 3. Within `scan_tree()` we scan the file if the file type matches `FTW_F`
    which is the flag for a file (as opposed to a directory, etc.) and 
    facilitate opening the file, reading it into the buffer, then comparing
    the strings contined inside with the contents of `char *sig`. If there 
    are matches, it will display that next to the filename. If not, it 
    will continue on.
+
 4. On completion, memory is freed accordingly and the program terminates
 
 Sample Output
