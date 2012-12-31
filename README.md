@@ -9,14 +9,14 @@ Using Scanner
 This virus scanner will scan all files in a directory structure. 
 To use Scanner, you must build it by running `make scan` in the 
 directory you extract to. Then, create a test structure by running 
-`./make_test` which will create a grouping of files but will copy
-the virus specimen into one of them. Finally, execute the virus scanner
-using `./scan [folder] [signatures]` where folder is a folder (perhaps 
-use your test_struct folder created with make_test) and signatures is the
-signatures file that was included.
+`./make_test` which will create a grouping of files based on data from
+`/dev/urandom` and will also take the file `specimen` and copy it randomly.
+Finally, execute the virus scanner using `./scan [folder] [signatures]` 
+where folder is a folder (perhaps use your test_struct folder created with 
+make_test) and the included `signatures` file.
 
 To summarize:
-* `make scan`
+* `make scan` (or however you choose to compile)
 * `./make_test`
 * `./scan test_struct/ signatures`
 
