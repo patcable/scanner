@@ -4,5 +4,17 @@ rm -Rf test_struct
 randfolder=$((RANDOM%6+1))
 randfile=$((RANDOM%3+1))
 mkdir -p test_struct/folder{1,2,3,4,5,6}
-touch test_struct/folder{1,2,3,4,5,6}/file{1,2,3}
+
+echo -n "Making test assets... "
+for i in `seq 1 6`; do
+    echo -n "$i "
+    for n in `seq 1 3`; do
+        echo -n "$n "
+        dd if=/dev/urandom of=test_struct/folder${i}/file${n} count=$RANDOM bs=1 > /dev/null 2>&1
+    done
+done
+echo "Done"
+echo -n "Placing specimen... "
 cp specimen test_struct/folder${randfolder}/file${randfile}
+echo "Done"
+echo "Test structure created. Run the scanner with ./scan test_struct/ signatures"
